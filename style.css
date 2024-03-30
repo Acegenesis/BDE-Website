@@ -87,6 +87,7 @@ body {
 
 header {
     position: fixed;
+    z-index: 10;
     padding: var(--header-padding) 0;
     display: flex;
     flex-direction: column;
@@ -106,11 +107,14 @@ header::after {
     display: block;
 }
 
+header .hamburger-inner {
+    transition: all 0.5s ease-in-out 0.5s;
+}
+
 header .hamburger-inner, 
 header .hamburger-inner:after, 
 header .hamburger-inner:before {
     background-color: #fff!important;
-    transition: all ease-in-out 0.5s;
 }
 
 .is-active .hamburger-inner, 
@@ -157,6 +161,7 @@ header .logos #logo_alt {
 }
 
 nav {
+    position: fixed;
     display: flex;
     width: 0px;
     height: 100vh;
@@ -168,7 +173,7 @@ nav {
 }
 
 nav.is-active {
-    width: 100vw;
+    width: calc(100vw - var(--header-width) - 100px);
     padding-left: calc(100px + var(--header-width));
 }
 
@@ -200,7 +205,6 @@ nav ul {
     padding-right: 50px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
     width: 100%;
     height: 100%;
     justify-content: center;
@@ -211,7 +215,7 @@ nav ul li {
     transform: translateY(40px);
     opacity: 0;
     visibility: hidden;
-    transition: opacity 1.5s ease 0.5s, transform 1s ease 0.5s;
+    transition: opacity 1.5s ease 1s, transform 1s ease 1s;
 }
 
 nav ul li a {
@@ -249,15 +253,30 @@ nav.is-active ul li {
     visibility: visible;
 }
 
+nav.is-active ul li a {
+    transition: color ease 0.5s;
+}
+
+nav.is-active ul li a:hover {
+    color: #fbe216;
+}
+
 
 /* ---------------------------------------------- */
 /* Main Css */
 /* ---------------------------------------------- */
 
+main {
+    margin-left: var(--header-width);
+    width: calc(100vw - var(--header-width));
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
 section {
-    padding: 50px;
     width: 100%;
-    height: calc(100vh - var(--nav-header) - 50px);
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
