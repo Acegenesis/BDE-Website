@@ -44,6 +44,13 @@
             nav.classList.toggle("is-active");
             header.classList.toggle("is-active");
         });
+        window.addEventListener('scroll', function() {
+            var pageHeight = document.body.scrollHeight;
+            var scroll = window.scrollY;
+            var header = document.getElementById('header');
+            var newHeight = scroll * 100 / pageHeight + scroll - 50  + 'px';
+            header.style.setProperty('--after-height', newHeight);
+        });
     </script>
     <main>
     
