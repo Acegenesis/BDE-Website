@@ -1,6 +1,10 @@
 <?php get_header(); ?>
-
-
+<section>
+    <h2>AAAAAAA</h2>
+</section>
+<section>
+    <h2>BBBBBBB</h2>
+</section>
 
 
 <!--

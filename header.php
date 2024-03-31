@@ -45,10 +45,11 @@
             header.classList.toggle("is-active");
         });
         window.addEventListener('scroll', function() {
-            var pageHeight = document.body.scrollHeight;
+            var pageHeight = document.documentElement.scrollHeight;
+            var windowHeight = window.innerHeight;
             var scroll = window.scrollY;
             var header = document.getElementById('header');
-            var newHeight = scroll * 100 / pageHeight + scroll - 50  + 'px';
+            var newHeight = Math.min(scroll * 100 / (pageHeight - windowHeight), 100) + '%';
             header.style.setProperty('--after-height', newHeight);
         });
     </script>
