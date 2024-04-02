@@ -59,6 +59,27 @@ table {
 }
 
 /* ---------------------------------------------- */
+/* Scroll Css */
+/* ---------------------------------------------- */
+
+::-webkit-scrollbar {
+    width: 3px;
+}
+  
+::-webkit-scrollbar-track {
+background: transparent; 
+}
+
+::-webkit-scrollbar-thumb {
+background: white; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: transparent; 
+}
+
+/* ---------------------------------------------- */
 /* Global Css */
 /* ---------------------------------------------- */
 
