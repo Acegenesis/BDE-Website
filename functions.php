@@ -1,4 +1,5 @@
 <?php
+require_once ABSPATH . '/wp-admin/includes/taxonomy.php';
 
 function enqueue_styles() {
     wp_enqueue_style( 'style', get_stylesheet_uri() );
@@ -27,21 +28,12 @@ function register_my_menus() {
 add_action( 'init', 'register_my_menus' );
 
 class Custom_Walker_Nav_Menu extends Walker_Nav_Menu {
-    function start_lvl( &$output, $depth = 0, $args = null ) {
-      // Ne rien faire pour éviter la création de la balise <ul>
-    }
-  
-    function end_lvl( &$output, $depth = 0, $args = null ) {
-      // Ne rien faire pour éviter la fermeture de la balise <ul>
-    }
-  
+    function start_lvl( &$output, $depth = 0, $args = null ) {}
+    function end_lvl( &$output, $depth = 0, $args = null ) {}
     function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
       $output .= '<li><a href="' . $item->url . '">' . $item->title . '</a></li>';
     }
-  
-    function end_el( &$output, $item, $depth = 0, $args = null ) {
-      // Ne rien faire pour éviter la fermeture de la balise <li>
-    }
+    function end_el( &$output, $item, $depth = 0, $args = null ) {}
   }
 
 function add_google_fonts() {
@@ -55,5 +47,13 @@ function add_google_fonts_preconnect() {
 }
 add_action( 'wp_head', 'add_google_fonts_preconnect' );
 
-  
+function remove_default_post_type() {
+  remove_menu_page( 'edit.php' ); // Masquer la page des articles
+}
+add_action( 'admin_menu', 'remove_default_post_type' );
+
+require_once( get_template_directory() . '/postType/event/event-custom-post-type.php' );
+require_once( get_template_directory() . '/postType/event/event-meta-boxes.php' );
+require_once( get_template_directory() . '/postType/event/event-sidebar-menu.php' );
+
 ?>
