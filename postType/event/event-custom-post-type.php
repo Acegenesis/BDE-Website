@@ -18,6 +18,16 @@ function change_event_labels( $labels ) {
 }
 add_filter( 'post_type_labels_events', 'change_event_labels' );
 
+// Changer le texte du champ de titre pour les événements
+function change_event_title_text( $title ) {
+    $screen = get_current_screen();
+    if ( $screen->post_type == 'events' ) {
+        $title = 'Saisissez le nom de l\'événement';
+    }
+    return $title;
+}
+add_filter( 'enter_title_here', 'change_event_title_text' );
+
 // Déclaration du Custom Post Type pour les événements
 function custom_post_type_events() {
     $args = array(
