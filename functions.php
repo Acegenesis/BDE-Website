@@ -56,4 +56,9 @@ require_once( get_template_directory() . '/postType/event/event-custom-post-type
 require_once( get_template_directory() . '/postType/event/event-meta-boxes.php' );
 require_once( get_template_directory() . '/postType/event/event-sidebar-menu.php' );
 
+require_once( get_template_directory() . '/postType/associations/associations-custom-post-type.php' );
+require_once( get_template_directory() . '/postType/associations/associations-meta-boxes.php' );
+require_once( get_template_directory() . '/postType/associations/associations-sidebar-menu.php' );
+
+
 ?>
