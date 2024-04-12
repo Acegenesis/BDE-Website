@@ -26,9 +26,13 @@ if ( $query->have_posts() ) :
             $event_url = get_permalink(); // URL de l'événement
             $event_id = get_the_ID();
             $slider_image = get_post_meta( $event_id, 'slider_image', true );
+            $date = get_post_meta( $event_id, 'event_date', true );
             ?>
             <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
                 <a href="<?php echo $event_url; ?>">
+                    <?php if($date) : ?>
+                    <h3><?php echo $date; ?></h3>
+                    <?php endif; ?>
                     <h2 class="entry-title"><?php the_title(); ?></h2>
                     <img src="<?php echo $slider_image; ?>" alt="<?php the_title(); ?>" />
                     <div class="more">

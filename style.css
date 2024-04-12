@@ -442,6 +442,7 @@ main {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+    font-family: "Poppins", sans-serif;
 }
 
 main h1 {
@@ -470,7 +471,6 @@ section {
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    font-family: "Poppins", sans-serif;
 }
 
 .container article {
@@ -502,11 +502,17 @@ section {
     text-decoration: none;
 }
 
+.container article h3 {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 25px;
+    font-weight: 300;
+}
+
 .container article h2 {
+    margin-top: 0;
     color: #fff;
     font-size: 50px;
     font-weight: 200;
-    margin-top: 20px;
 }
 
 .container article img {
@@ -554,7 +560,6 @@ section {
     align-items: center;
     gap: 20px;
     margin-top: 50px;
-    font-family: "Poppins", sans-serif;
     font-size: 20px;
     font-weight: 300;
     color: #fff;
