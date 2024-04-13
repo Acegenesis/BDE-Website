@@ -60,5 +60,73 @@ require_once( get_template_directory() . '/postType/associations/associations-cu
 require_once( get_template_directory() . '/postType/associations/associations-meta-boxes.php' );
 require_once( get_template_directory() . '/postType/associations/associations-sidebar-menu.php' );
 
+// Ajouter un modèle de page personnalisé pour les événements
+function custom_events_template( $template ) {
+  if ( is_singular( 'events' ) ) {
+      // Chemin vers votre modèle de page personnalisé
+      $custom_template = locate_template( '/templates/single/single-events.php' );
+      if ( ! empty( $custom_template ) ) {
+          return $custom_template;
+      }
+  }
+
+  return $template;
+}
+add_filter( 'template_include', 'custom_events_template' );
+
+// Fonction pour charger les événements supplémentaires via AJAX
+add_action('wp_ajax_load_more_events', 'load_more_events');
+add_action('wp_ajax_nopriv_load_more_events', 'load_more_events');
+function load_more_events() {
+    $page = $_POST['page']; // Numéro de page
+
+    // Calculez le décalage pour exclure les événements déjà affichés
+    $offset = ($page - 1) * 4;
+
+    $args = array(
+        'post_type'      => 'events',
+        'posts_per_page' => 4, // Nombre d'événements par page
+        'paged'          => $page, // Page actuelle
+        'offset'         => $offset, // Exclure les événements déjà affichés
+        'order'          => 'DESC', // Ordre décroissant (du plus récent au plus ancien)
+    );
+
+    $query = new WP_Query($args);
+
+    if ($query->have_posts()) :
+        while ($query->have_posts()) : $query->the_post();
+            ?>
+            <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+                <a href="<?php the_permalink(); ?>">
+                    <h2 class="entry-title"><?php the_title(); ?></h2>
+                    <?php
+                    $slider_image = get_post_meta(get_the_ID(), 'slider_image', true);
+                    if ($slider_image) :
+                    ?>
+                        <img src="<?php echo esc_url($slider_image); ?>" alt="<?php the_title(); ?>" />
+                    <?php endif; ?>
+                    <div class="more">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                            <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                            <path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/>
+                        </svg>
+                    </div>
+                </a>
+            </article>
+            <?php
+        endwhile;
+        if( $page == $query->max_num_pages && $query->found_posts % 2 != 0 ) :
+          ?>
+          <article>
+          </article>
+        <?php
+        endif;
+        wp_reset_postdata();
+    endif;
+
+    wp_die(); // Arrêter l'exécution de PHP
+}
+
+
 
 ?>
