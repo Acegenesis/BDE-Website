@@ -1,20 +1,20 @@
 <?php
 /*
-Template Name: Liste des événements
+Template Name: Liste des associations
 */
 get_header();
 ?>
 
-<h1>Liste des événements</h1>
-<div id="events-container" class="container">
+<h1>Liste des associations</h1>
+<div id="associations-container" class="container">
     <?php
     $paged = 1;
-    // Initialisation de la requête pour afficher les premiers événements
+    // Initialisation de la requête pour afficher les premières associations
     $args = array(
-        'post_type'      => 'events',
-        'posts_per_page' => 4, // Nombre d'événements par page
+        'post_type'      => 'associations',
+        'posts_per_page' => 4, // Nombre d'associations par page
         'paged'          => $paged, // Page actuelle
-        'order'          => 'DESC', // Ordre décroissant (du plus récent au plus ancien)
+        'order'          => 'DESC', // Ordre décroissant (de la plus récente a la plus ancienne)
     );
 
     $query = new WP_Query($args);
@@ -26,7 +26,7 @@ get_header();
                 <a href="<?php the_permalink(); ?>">
                     <h2 class="entry-title"><?php the_title(); ?></h2>
                     <?php
-                    $slider_image = get_post_meta(get_the_ID(), 'slider_image', true);
+                    $slider_image = get_post_meta(get_the_ID(), 'logo_image', true);
                     if ($slider_image) :
                     ?>
                         <img src="<?php echo esc_url($slider_image); ?>" alt="<?php the_title(); ?>" />
@@ -49,11 +49,11 @@ get_header();
         endif;
         wp_reset_postdata();
     else :
-        // Aucun événement trouvé
-        echo '<p>Aucun événement trouvé.</p>';
+        // Aucune association trouvé
+        echo '<p>Aucune association trouvé.</p>';
     endif;
     if( $query->max_num_pages > 1 ) : ?>
-        <button id="load-more-events">Voir Plus</button>
+        <button id="load-more-associations">Voir Plus</button>
     <?php endif; ?>
 </div>
 <script>
@@ -61,23 +61,23 @@ jQuery(document).ready(function($){
     var page = 1; // Numéro de page initial
     var maxPage = <?php echo $query->max_num_pages; ?>;
 
-    $('#load-more-events').click(function(){
+    $('#load-more-associations').click(function(){
         page++; // Incrémenter le numéro de page
 
-        // Requête AJAX pour charger les événements suivants
+        // Requête AJAX pour charger les associations suivants
         $.ajax({
             url: '<?php echo admin_url('admin-ajax.php'); ?>',
             type: 'POST',
             data: {
-                action: 'load_more_events', // Action WordPress
+                action: 'load_more_associations', // Action WordPress
                 page: page, // Numéro de page à charger
             },
             success: function(response) {
                 if (response != '' && page < maxPage) {
-                    $('#events-container').append(response); // Ajouter les événements chargés à la fin du conteneur
+                    $('#associations-container').append(response); // Ajouter les associations chargés à la fin du conteneur
                 } else {
-                    $('#events-container').append(response); // Ajouter les événements chargés à la fin du conteneur
-                    $('#load-more-events').remove(); // Cacher le bouton Voir Plus
+                    $('#associations-container').append(response); // Ajouter les associations chargés à la fin du conteneur
+                    $('#load_more_associations').remove(); // Cacher le bouton Voir Plus
                 }
             }
         });
