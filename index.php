@@ -1,10 +1,43 @@
 <?php get_header(); ?>
-<section>
-    <h2>AAAAAAA</h2>
+<section class="sliderhero">
+    <div>
+        <h2>Construisons la vie de notre campus ensemble</h2>
+    </div>
+    <div class="swiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <h3>Event</h3>
+                <h2>LE GALA</h2>
+                <img src="https://images.unsplash.com/photo-1708366396213-14c75d582a7c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxNDU3Nzg5Ng&ixlib=rb-4.0.3&q=80&w=1080" alt="Image 1">
+                <a href="https://www.instagram.com/le_gala_enssat/" target="_blank"></a>
+            </div>
+            <div class="swiper-slide">
+                <h2>LE GALA</h2>
+            </div>
+            <div class="swiper-slide">
+                <h2>LE GALA</h2>
+            </div>
+        </div>
+    </div>
+    <div class="arrows">
+        <div class="prev">01</div>
+        <div class="next">03</div>
+    </div>
 </section>
 <section>
     <h2>BBBBBBB</h2>
 </section>
+
+<script>
+const swiper = new Swiper('.swiper', {
+  loop: true,
+  navigation: {
+    nextEl: '.next',
+    prevEl: '.prev',
+  },
+  direction: "vertical",
+});
+</script>
 
 
 <!--
