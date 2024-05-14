@@ -763,3 +763,10 @@ section {
     height: 1px;
     background-color: white;
 }
+
+
+@media screen and (max-width: 1600px) {
+    .sliderhero>div:nth-child(1) h2 {
+        font-size: 120px;
+    }
+}

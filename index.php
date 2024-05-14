@@ -1,27 +1,46 @@
-<?php get_header(); ?>
+<?php 
+get_header();
+$args = array(
+    'post_type' => 'events',
+    'meta_query' => array(
+        array(
+            'key' => 'slider_home',
+            'value' => 'on',
+            'compare' => '=',
+        ),
+    ),
+);
+$query = new WP_Query( $args );
+$total_posts = $query->found_posts;
+?>
 <section class="sliderhero">
     <div>
         <h2>Construisons la vie de notre campus ensemble</h2>
     </div>
     <div class="swiper">
         <div class="swiper-wrapper">
+            <?php 
+                if ( $query->have_posts() ) :
+                    while ( $query->have_posts() ) : $query->the_post();
+            ?>
             <div class="swiper-slide">
                 <h3>Event</h3>
-                <h2>LE GALA</h2>
-                <img src="https://images.unsplash.com/photo-1708366396213-14c75d582a7c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxNDU3Nzg5Ng&ixlib=rb-4.0.3&q=80&w=1080" alt="Image 1">
-                <a href="https://www.instagram.com/le_gala_enssat/" target="_blank"></a>
+                <h2><?php echo the_title() ?></h2>
+                <img src="<?php echo get_post_meta( get_the_ID(), 'slider_image', true ); ?>" alt="Image 1">
+                <a href="<?php echo get_permalink() ?>" target="_blank"></a>
             </div>
-            <div class="swiper-slide">
-                <h2>LE GALA</h2>
-            </div>
-            <div class="swiper-slide">
-                <h2>LE GALA</h2>
-            </div>
+            <?php 
+                endwhile;
+                wp_reset_postdata();
+                else :
+                    // Aucun post trouvé
+                endif;
+            ?>
         </div>
     </div>
     <div class="arrows">
-        <div class="prev">01</div>
-        <div class="next">03</div>
+        <div class="prev" id="prev">01</div>
+        <div class="next"><?php echo ($total_posts < 10) ? '0' . $total_posts : $total_posts ?></div>
     </div>
 </section>
 <section>
@@ -36,6 +55,21 @@ const swiper = new Swiper('.swiper', {
     prevEl: '.prev',
   },
   direction: "vertical",
+});
+
+swiper.on('slideChange', function () {
+    var activeIndex = swiper.realIndex + 1;
+    document.getElementById('prev').innerHTML = (activeIndex < 10) ? "0" + activeIndex : activeIndex;
+});
+
+document.querySelector('.prev').addEventListener('click', function () {
+    var activeIndex = swiper.realIndex + 1;
+    document.getElementById('prev').innerHTML = (activeIndex < 10) ? "0" + activeIndex : activeIndex;
+});
+
+document.querySelector('.next').addEventListener('click', function () {
+    var activeIndex = swiper.realIndex + 1;
+    document.getElementById('prev').innerHTML = (activeIndex < 10) ? "0" + activeIndex : activeIndex;
 });
 </script>
 

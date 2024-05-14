@@ -9,17 +9,16 @@ function add_event_metaboxes() {
         'normal', // Container principal
         'high' // Priorité élevée
     );
-    
-    add_action( 'post_submitbox_misc_actions', 'event_scheduled_publish_callback' );
 }
 add_action( 'add_meta_boxes_events', 'add_event_metaboxes', 10 );
 
+// Affichage de la méta-boxe et de la case à cocher
 function event_details_callback() {
     global $post;
-    // Récupération des valeurs des métadonnées
     $event_date = get_post_meta( $post->ID, 'event_date', true );
     $ticket_link = get_post_meta( $post->ID, 'ticket_link', true );
     $slider_image = get_post_meta( $post->ID, 'slider_image', true );
+    $slider_home = get_post_meta( $post->ID, 'slider_home', true);
     ?>
     <p>Date de l'événement : <input type="date" name="event_date" value="<?php echo esc_attr( $event_date ); ?>" /></p>
     <p>Lien vers la billetterie : <input type="text" name="ticket_link" value="<?php echo esc_url( $ticket_link ); ?>" /></p>
@@ -31,6 +30,8 @@ function event_details_callback() {
             <img src="<?php echo esc_url($slider_image); ?>" style="max-width: 300px; height: auto;" />
         <?php endif; ?>
     </div>
+    <p>Slider Home : <input type="checkbox" name="slider_home" <?php checked( $slider_home, 'on' ); ?> /></p>
+    
     <script>
         jQuery(document).ready(function($){
             $('#upload_image_button').click(function() {
@@ -47,18 +48,6 @@ function event_details_callback() {
     <?php
 }
 
-function event_scheduled_publish_callback() {
-    global $post;
-    // Récupération de la date de publication différée
-    $scheduled_publish_date = get_post_meta( $post->ID, 'scheduled_publish_date', true );
-    ?>
-    <div class="misc-pub-section misc-pub-scheduled-publish">
-        <label for="scheduled_publish_date">Date de publication différée :</label>
-        <input type="datetime-local" name="scheduled_publish_date" id="scheduled_publish_date" value="<?php echo esc_attr( $scheduled_publish_date ); ?>" />
-    </div>
-    <?php
-}
-
 // Sauvegarde des métadonnées des événements
 function save_event_metaboxes( $post_id ) {
     if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
@@ -72,10 +61,11 @@ function save_event_metaboxes( $post_id ) {
     if ( isset( $_POST['slider_image'] ) ) {
         update_post_meta( $post_id, 'slider_image', esc_url( $_POST['slider_image'] ) );
     }
-    if ( isset( $_POST['scheduled_publish_date'] ) ) {
-        update_post_meta( $post_id, 'scheduled_publish_date', sanitize_text_field( $_POST['scheduled_publish_date'] ) );
-        $scheduled_publish_date = strtotime( $_POST['scheduled_publish_date'] );
-        wp_schedule_single_event( $scheduled_publish_date, 'publish_future_post', array( $post_id ) );
+    // Enregistrement de la valeur de la case à cocher
+    if ( isset( $_POST['slider_home'] ) ) {
+        update_post_meta( $post_id, 'slider_home', $_POST['slider_home'] );
+    } else {
+        update_post_meta( $post_id, 'slider_home', 'off' );
     }
 }
 add_action( 'save_post', 'save_event_metaboxes' );
