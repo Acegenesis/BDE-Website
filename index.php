@@ -27,7 +27,7 @@ $total_posts = $query->found_posts;
                 <h3>Event</h3>
                 <h2><?php echo the_title() ?></h2>
                 <img src="<?php echo get_post_meta( get_the_ID(), 'slider_image', true ); ?>" alt="Image 1">
-                <a href="<?php echo get_permalink() ?>" target="_blank"></a>
+                <a href="<?php echo get_permalink() ?>"></a>
             </div>
             <?php 
                 endwhile;
@@ -43,8 +43,41 @@ $total_posts = $query->found_posts;
         <div class="next"><?php echo ($total_posts < 10) ? '0' . $total_posts : $total_posts ?></div>
     </div>
 </section>
-<section>
-    <h2>BBBBBBB</h2>
+<section class="presentation">
+    <h2>Presentation du bde</h2>
+    <div class="container">
+        <div>
+            <h3>Qu'est-ce qu'un BDE ?</h3>
+            <p>Le Bureau Des Élèves (BDE) est une association à but non-lucratif qui a pour but de donner un cadre légal à toutes les manifestations extra-scolaires sur le campus.</p>
+        </div>
+        <div>
+            <h3>Quel est son rôle ?</h3>
+            <p>Le rôle du BDE est de fournir un cadre légal à toute organisation des manifestations. Il s’occupe aussi d’organiser des évènements, mais surtout, il accompagne les apprenants dans leurs projets associatifs pour le campus !</p>
+        </div>
+        <div>
+            <h3>Qui organise tout ça ?</h3>
+            <p>Le BDE est dirigé par des apprenants bénévoles avec une volonté de donner vie au campus et renforcer le lien inter-promotions !</p>
+        </div>
+    </div>
+</section>
+<section class="partenaire">
+    <h2>Nos partenaires</h2>
+    <div class="swiperPartenaire">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <img src="https://bdecesinancy.fr/sponsors/cesi.png" alt="Image 1">
+            </div>
+            <div class="swiper-slide">
+                <img src="https://bdecesinancy.fr/sponsors/lcl.png" alt="Image 1">
+            </div>
+            <div class="swiper-slide">
+                <img src="https://bdecesinancy.fr/sponsors/redbull.png" alt="Image 1">
+            </div>
+            <div class="swiper-slide">
+                <img src="https://bdecesinancy.fr/sponsors/en-voiture-simone.png" alt="Image 1">
+            </div>
+        </div>
+    </div>
 </section>
 
 <script>
@@ -55,6 +88,15 @@ const swiper = new Swiper('.swiper', {
     prevEl: '.prev',
   },
   direction: "vertical",
+});
+
+const swiper2 = new Swiper('.swiperPartenaire', {
+    loop: true,
+    slidesPerView: 3,
+    autoplay: {
+            delay: 2500,
+            disableOnInteraction: true,
+    },
 });
 
 swiper.on('slideChange', function () {
