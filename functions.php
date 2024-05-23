@@ -34,7 +34,7 @@ add_action( 'wp_enqueue_scripts', 'enqueue_styles' );
 add_action( 'wp_enqueue_scripts', 'enqueue_swiper' );
 add_action( 'wp_enqueue_scripts', 'add_google_fonts' );
 
-add_action('admin_enqueue_scripts', 'load_custom_wp_admin_style');
+add_action( 'admin_enqueue_scripts', 'load_custom_wp_admin_style' );
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
