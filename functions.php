@@ -1,6 +1,8 @@
 <?php
 require_once ABSPATH . '/wp-admin/includes/taxonomy.php';
 
+// -----------------------------------------------------------------------------
+// Ajouter les librairies de style et de script dans le theme
 function enqueue_styles() {
     wp_enqueue_style( 'style', get_stylesheet_uri() );
     wp_enqueue_style( 'hamburger-style', get_template_directory_uri() . '/assets/css/hamburger.min.css' );
@@ -17,12 +19,26 @@ function load_custom_wp_admin_style() {
     wp_enqueue_script('bootstrap-js', 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js', array('jquery'), null, true);
     wp_enqueue_style('admin-custom-css', get_template_directory_uri() . '/admin-style.css');
 }
+function add_google_fonts() {
+    wp_enqueue_style( 'google-fonts', 'https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap', false );
+}
+
+function add_google_fonts_preconnect() {
+    echo '<link rel="preconnect" href="https://fonts.googleapis.com">';
+    echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';
+}
+
+add_action( 'wp_head', 'add_google_fonts_preconnect' );
 
 add_action( 'wp_enqueue_scripts', 'enqueue_styles' );
 add_action( 'wp_enqueue_scripts', 'enqueue_swiper' );
+add_action( 'wp_enqueue_scripts', 'add_google_fonts' );
+
 add_action('admin_enqueue_scripts', 'load_custom_wp_admin_style');
+// -----------------------------------------------------------------------------
 
-
+// -----------------------------------------------------------------------------
+// Ajouter des menus et les customiser
 function register_my_menus() {
     register_nav_menus(
       array(
@@ -30,76 +46,72 @@ function register_my_menus() {
         'footer-menu' => __( 'Footer Menu' )
       )
     );
-  }
-
-add_action( 'init', 'register_my_menus' );
+}
 
 class Custom_Walker_Nav_Menu extends Walker_Nav_Menu {
     function start_lvl( &$output, $depth = 0, $args = null ) {}
     function end_lvl( &$output, $depth = 0, $args = null ) {}
     function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
-      $output .= '<li><a href="' . $item->url . '">' . $item->title . '</a></li>';
+        $output .= '<li><a href="' . $item->url . '">' . $item->title . '</a></li>';
     }
     function end_el( &$output, $item, $depth = 0, $args = null ) {}
-  }
-
-function add_google_fonts() {
-    wp_enqueue_style( 'google-fonts', 'https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap', false );
 }
-add_action( 'wp_enqueue_scripts', 'add_google_fonts' );
 
-function add_google_fonts_preconnect() {
-    echo '<link rel="preconnect" href="https://fonts.googleapis.com">';
-    echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';
-}
-add_action( 'wp_head', 'add_google_fonts_preconnect' );
+add_action( 'init', 'register_my_menus' );
+// -----------------------------------------------------------------------------
 
+// -----------------------------------------------------------------------------
+// Supprimer le système de post basique de wordpress pour ajouter des customs
 function remove_default_post_type() {
   remove_menu_page( 'edit.php' ); // Masquer la page des articles
 }
+
 add_action( 'admin_menu', 'remove_default_post_type' );
+// -----------------------------------------------------------------------------
 
-require_once( get_template_directory() . '/postType/event/event-custom-post-type.php' );
-require_once( get_template_directory() . '/postType/event/event-meta-boxes.php' );
-require_once( get_template_directory() . '/postType/event/event-sidebar-menu.php' );
+// -----------------------------------------------------------------------------
+// Script pour ajourter dynamiquement tous les types disponibles dans le dossier
+$post_types_dir = get_template_directory() . '/postType/';
+$post_types = glob($post_types_dir . '*', GLOB_ONLYDIR);
 
-require_once( get_template_directory() . '/postType/associations/associations-custom-post-type.php' );
-require_once( get_template_directory() . '/postType/associations/associations-meta-boxes.php' );
-require_once( get_template_directory() . '/postType/associations/associations-sidebar-menu.php' );
+foreach ($post_types as $post_type_dir) {
+    // Inclure les fichiers dans chaque répertoire de type de post
+    foreach (glob($post_type_dir . '/*.php') as $file) {
+        require_once $file;
+    }
+}
+// -----------------------------------------------------------------------------
 
-require_once( get_template_directory() . '/postType/news/news-custom-post-type.php' );
-require_once( get_template_directory() . '/postType/news/news-meta-boxes.php' );
-require_once( get_template_directory() . '/postType/news/news-sidebar-menu.php' );
-
-// Ajouter un modèle de page personnalisé pour les événements
+// -----------------------------------------------------------------------------
+// Ajouter les modèles de page personnalisé dynamiquement
 function custom_template( $template ) {
-  if ( is_singular( 'events' ) ) {
-      $custom_template = locate_template( '/templates/single/single-events.php' );
-      if ( ! empty( $custom_template ) ) {
-          return $custom_template;
-      }
-  }
-  else if ( is_singular( 'associations' ) ) {
-      $custom_template = locate_template( '/templates/single/single-associations.php' );
-      if ( ! empty( $custom_template ) ) {
-          return $custom_template;
-      }
-  }
-  else if ( is_singular( 'news' ) ) {
-      $custom_template = locate_template( '/templates/single/single-news.php' );
-      if ( ! empty( $custom_template ) ) {
-          return $custom_template;
-      }
-  }
-  else {
-      return $template;
-  }
+    // Répertoire des modèles
+    $template_directory = get_template_directory() . '/templates/single/';
+
+    // Obtenir tous les fichiers single-*.php dans le répertoire des modèles
+    $files = glob( $template_directory . 'single-*.php' );
+
+    // Parcourir chaque fichier
+    foreach ( $files as $file ) {
+        // Extraire le nom du type de post à partir du nom de fichier
+        $file_name = basename( $file );
+        if ( preg_match( '/^single-(.+)\.php$/', $file_name, $matches ) ) {
+            $post_type = $matches[1];
+
+            // Vérifier si c'est un type de post singulier de ce type
+            if ( is_singular( $post_type ) ) {
+                return locate_template( "templates/single/{$file_name}" );
+            }
+        }
+    }
+    // Retourner le template par défaut si aucun modèle personnalisé n'est trouvé
+    return $template;
 }
 add_filter( 'template_include', 'custom_template' );
+// -----------------------------------------------------------------------------
 
+// -----------------------------------------------------------------------------
 // Fonction pour charger les événements supplémentaires via AJAX
-add_action('wp_ajax_load_more_events', 'load_more_events');
-add_action('wp_ajax_nopriv_load_more_events', 'load_more_events');
 function load_more_events() {
     $page = $_POST['page']; // Numéro de page
 
@@ -152,8 +164,6 @@ function load_more_events() {
 }
 
 // Fonction pour charger les associations supplémentaires via AJAX
-add_action('wp_ajax_load_more_associations', 'load_more_associations');
-add_action('wp_ajax_nopriv_load_more_associations', 'load_more_associations');
 function load_more_associations() {
     $page = $_POST['page']; // Numéro de page
 
@@ -205,8 +215,6 @@ function load_more_associations() {
 }
 
 // Fonction pour charger les news supplémentaires via AJAX
-add_action('wp_ajax_load_more_news', 'load_more_news');
-add_action('wp_ajax_nopriv_load_more_news', 'load_more_news');
 function load_more_news() {
     $page = $_POST['page']; // Numéro de page
 
@@ -256,5 +264,14 @@ function load_more_news() {
 
     wp_die(); // Arrêter l'exécution de PHP
 }
+
+add_action('wp_ajax_load_more_events', 'load_more_events');
+add_action('wp_ajax_load_more_associations', 'load_more_associations');
+add_action('wp_ajax_load_more_news', 'load_more_news');
+
+add_action('wp_ajax_nopriv_load_more_events', 'load_more_events');
+add_action('wp_ajax_nopriv_load_more_associations', 'load_more_associations');
+add_action('wp_ajax_nopriv_load_more_news', 'load_more_news');
+// -----------------------------------------------------------------------------
 
 ?>
