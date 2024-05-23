@@ -12,6 +12,12 @@ $args = array(
 );
 $query = new WP_Query( $args );
 $total_posts = $query->found_posts;
+
+$argsPartenaires = array(
+    'post_type' => 'partenaires',
+);
+$queryPartenaires = new WP_Query( $argsPartenaires );
+
 ?>
 <section class="sliderhero">
     <div>
@@ -62,21 +68,21 @@ $total_posts = $query->found_posts;
 </section>
 <section class="partenaire">
     <h2>Nos partenaires</h2>
-    <div class="swiperPartenaire">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <img src="https://bdecesinancy.fr/sponsors/cesi.png" alt="Image 1">
-            </div>
-            <div class="swiper-slide">
-                <img src="https://bdecesinancy.fr/sponsors/lcl.png" alt="Image 1">
-            </div>
-            <div class="swiper-slide">
-                <img src="https://bdecesinancy.fr/sponsors/redbull.png" alt="Image 1">
-            </div>
-            <div class="swiper-slide">
-                <img src="https://bdecesinancy.fr/sponsors/en-voiture-simone.png" alt="Image 1">
-            </div>
-        </div>
+    <div class="gridPartenaires">
+            <?php 
+                if ( $queryPartenaires->have_posts() ) :
+                    while ( $queryPartenaires->have_posts() ) : $queryPartenaires->the_post();
+            ?>
+            <a <?php echo (get_post_meta( get_the_ID(), 'url', true )) ? 'href="' . get_post_meta( get_the_ID(), 'url', true ) . '" target="_blank"' : ""; ?> class="cardPartenaire">
+                <img src="<?php echo get_post_meta( get_the_ID(), 'logo_image', true ); ?>" alt="Image 1">
+                </a>
+            <?php 
+                endwhile;
+                wp_reset_postdata();
+                else :
+                    // Aucun post trouvé
+                endif;
+            ?>
     </div>
 </section>
 
@@ -88,15 +94,6 @@ const swiper = new Swiper('.swiper', {
     prevEl: '.prev',
   },
   direction: "vertical",
-});
-
-const swiper2 = new Swiper('.swiperPartenaire', {
-    loop: true,
-    slidesPerView: 3,
-    autoplay: {
-            delay: 2500,
-            disableOnInteraction: true,
-    },
 });
 
 swiper.on('slideChange', function () {

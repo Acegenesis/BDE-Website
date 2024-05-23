@@ -23,11 +23,6 @@ function add_partenaires_metaboxes() {
 }
 add_action('add_meta_boxes', 'add_partenaires_metaboxes');
 
-function remove_postdivrich_meta_box_for_partenaires() {
-    remove_meta_box('postdivrich', 'partenaires', 'normal');
-}
-add_action('add_meta_boxes', 'remove_postdivrich_meta_box_for_partenaires');
-
 // Callback pour afficher la méta box des détails des partenaires
 function partenaires_details_callback($post) {
     // Récupération des valeurs des métadonnées
@@ -88,7 +83,7 @@ function save_partenaires_metaboxes($post_id) {
         update_post_meta($post_id, 'logo_image', esc_url($_POST['logo_image']));
     }
     if (isset($_POST['url'])) {
-        update_post_meta($post_id, 'president', sanitize_text_field($_POST['president']));
+        update_post_meta($post_id, 'url', sanitize_text_field($_POST['url']));
     }
 }
 add_action('save_post', 'save_partenaires_metaboxes');

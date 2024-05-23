@@ -778,9 +778,9 @@ section {
 /* ---------------------------------------------- */
 
 .presentation {
-    margin: 100px 0;
+    height: 100vh;
+    padding: 100px 0;
     padding-left: 100px;
-    justify-content: flex-start;
     align-items: flex-start;
 
     h2 {
@@ -807,7 +807,7 @@ section {
         height: max-content;
         display: flex;
         flex-direction: column;
-        gap: 50px;
+        gap: 75px;
 
         div {
             color: white;       
@@ -833,7 +833,7 @@ section {
 /* ---------------------------------------------- */
 
 .partenaire {
-    overflow: hidden;
+    padding-left: 100px;
     margin-bottom: 200px;
     justify-content: flex-start;
     align-items: flex-start;
@@ -841,7 +841,6 @@ section {
 
     h2 {
         --width-dot : 10px;
-        padding-left: 100px;
         position: relative;
         color: white;
         font-size: 60px;
@@ -859,14 +858,23 @@ section {
         }
     }
 
-    .swiperPartenaire {
+    .gridPartenaires {
         width: 100%;
-        height: 300px;
-        position: relative;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 50px 50px;
 
-        img{
-            width: 100%;
-            object-fit: cover;
+        .cardPartenaire {
+            height: 200px;
+            width: 200px;
+
+            img{
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
         }
+        
     }
 }
