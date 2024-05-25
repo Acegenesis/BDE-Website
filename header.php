@@ -1,21 +1,40 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="utf-8">
-    <title><?php wp_title(); ?></title>
+<head <?php language_attributes(); ?>>
+    <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <?php
+        if (is_single() || is_page()) {
+            $meta_description = get_the_excerpt();
+        } elseif (is_home() || is_front_page()) {
+            $meta_description = get_bloginfo('description');
+        } else {
+            $meta_description = 'Description par défaut pour le site.';
+        }
+    ?>
+    <meta name="description" content="<?php echo esc_attr($meta_description); ?>">
     <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
     <header id="header">
-        <button class="hamburger hamburger--collapse" type="button">
+        <button class="hamburger hamburger--collapse" type="button" aria-label="Ouvrir le menu de navigation">
             <span class="hamburger-box">
                 <span class="hamburger-inner"></span>
             </span>
         </button>
         <a href="<?php echo home_url();?>" class="logos">
-            <img id="logo" src="<?php echo get_template_directory_uri(); ?>/assets/imgs/logo.png" alt="Logo du site">
-            <img id="logo_alt" src="<?php echo get_template_directory_uri(); ?>/assets/imgs/logo_alt.png" alt="Logo du site">
+            <?php
+                $main_logo = get_option('main_logo');
+                if ($main_logo): 
+            ?>
+                <img id="logo" src="<?php echo $main_logo; ?>" alt="Logo du site 1">
+            <?php endif; ?>
+            <?php
+                $secondary_logo = get_option('secondary_logo');
+                if ($secondary_logo): 
+            ?>
+                <img id="logo_alt" src="<?php echo $secondary_logo; ?>" alt="Logo du site 2">
+            <?php endif; ?>
         </a>
     </header>
     <nav id="nav">

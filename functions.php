@@ -274,4 +274,109 @@ add_action('wp_ajax_nopriv_load_more_associations', 'load_more_associations');
 add_action('wp_ajax_nopriv_load_more_news', 'load_more_news');
 // -----------------------------------------------------------------------------
 
+// -----------------------------------------------------------------------------
+// Désactiver les commentaires sur les types de post
+function disable_comments_post_types_support() {
+    $post_types = get_post_types();
+    foreach ($post_types as $post_type) {
+        if (post_type_supports($post_type, 'comments')) {
+            remove_post_type_support($post_type, 'comments');
+            remove_post_type_support($post_type, 'trackbacks');
+        }
+    }
+}
+add_action('admin_init', 'disable_comments_post_types_support');
+
+// Fermer les commentaires sur les articles existants
+function disable_comments_status() {
+    return false;
+}
+add_filter('comments_open', 'disable_comments_status', 20, 2);
+add_filter('pings_open', 'disable_comments_status', 20, 2);
+
+// Masquer les sections de commentaires du tableau de bord
+function disable_comments_hide_existing_comments($comments) {
+    $comments = array();
+    return $comments;
+}
+add_filter('comments_array', 'disable_comments_hide_existing_comments', 10, 2);
+
+// Supprimer le menu des commentaires du tableau de bord
+function disable_comments_admin_menu() {
+    remove_menu_page('edit-comments.php');
+}
+add_action('admin_menu', 'disable_comments_admin_menu');
+
+// Rediriger les utilisateurs essayant d'accéder aux pages des commentaires
+function disable_comments_admin_menu_redirect() {
+    global $pagenow;
+    if ($pagenow === 'edit-comments.php') {
+        wp_redirect(admin_url());
+        exit;
+    }
+}
+add_action('admin_init', 'disable_comments_admin_menu_redirect');
+// -----------------------------------------------------------------------------
+
+function my_theme_setup() {
+    add_theme_support('title-tag');
+}
+add_action('after_setup_theme', 'my_theme_setup');
+
+
+// Inclure les fichiers de personnalisation
+require get_template_directory() . '/inc/customizer/customizer-settings.php';
+require get_template_directory() . '/inc/customizer/customizer-page-general.php';
+require get_template_directory() . '/inc/customizer/customizer-page-home.php';
+
+// Ajouter la page de menu de personnalisation dans l'administration
+function my_theme_customizer_menu() {
+    add_menu_page(
+        __('Paramètres theme', 'textdomain'), // Titre de la page
+        __('Paramètres theme', 'textdomain'), // Titre du menu
+        'manage_options', // Capacité requise
+        'theme-customizer', // Slug de la page
+        'my_theme_customizer_page', // Fonction de rappel
+        'dashicons-admin-customizer', // Icône du menu
+        61 // Position
+    );
+
+    add_submenu_page(
+        'theme-customizer', // Slug du parent
+        __('Général', 'textdomain'), // Titre de la page
+        __('Général', 'textdomain'), // Titre du menu
+        'manage_options', // Capacité requise
+        'theme-customizer-general', // Slug de la page
+        'my_theme_customizer_page' // Fonction de rappel
+    );
+
+    add_submenu_page(
+        'theme-customizer', // Slug du parent
+        __('Home', 'textdomain'), // Titre de la page
+        __('Home', 'textdomain'), // Titre du menu
+        'manage_options', // Capacité requise
+        'theme-customizer-home', // Slug de la page
+        'my_theme_customizer_page_home' // Fonction de rappel
+    );
+}
+add_action('admin_menu', 'my_theme_customizer_menu');
+
+function my_theme_remove_submenu() {
+    remove_submenu_page('theme-customizer', 'theme-customizer');
+}
+add_action('admin_menu', 'my_theme_remove_submenu', 999);
+
+// Vérifier les autorisations d'accès à la page de personnalisation du thème
+function my_theme_customizer_capability_check() {
+    if (!current_user_can('manage_options')) {
+        wp_die(__('Vous n\'avez pas les autorisations nécessaires pour accéder à cette page.', 'textdomain'));
+    }
+}
+add_action('admin_init', 'my_theme_customizer_capability_check');
+
+function my_theme_customizer_enqueue() {
+    wp_enqueue_media();
+}
+add_action('admin_enqueue_scripts', 'my_theme_customizer_enqueue');
+
 ?>
