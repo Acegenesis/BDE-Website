@@ -10,8 +10,8 @@ function my_theme_customize_register($wp_customize) {
     $wp_customize->add_setting('blogname', array(
         'default'           => get_option('blogname'),
         'capability'        => 'edit_theme_options',
-        'sanitize_callback' => 'wp_filter_nohtml_kses', // Sanitize input
-        'transport'         => 'postMessage', // Ajout pour l'aperçu en direct
+        'sanitize_callback' => 'wp_filter_nohtml_kses',
+        'transport'         => 'postMessage',
     ));
 
     $wp_customize->add_control('blogname', array(
@@ -25,8 +25,8 @@ function my_theme_customize_register($wp_customize) {
     $wp_customize->add_setting('blogdescription', array(
         'default'           => get_option('blogdescription'),
         'capability'        => 'edit_theme_options',
-        'sanitize_callback' => 'wp_filter_nohtml_kses', // Sanitize input
-        'transport'         => 'postMessage', // Ajout pour l'aperçu en direct
+        'sanitize_callback' => 'wp_filter_nohtml_kses',
+        'transport'         => 'postMessage',
     ));
 
     $wp_customize->add_control('blogdescription', array(
@@ -39,10 +39,10 @@ function my_theme_customize_register($wp_customize) {
     // Logo principal
     $wp_customize->add_setting('main_logo', array(
         'capability'        => 'edit_theme_options',
-        'sanitize_callback' => 'esc_url_raw', // Sanitize URL
+        'sanitize_callback' => 'esc_url_raw',
     ));
 
-    $wp_customize->add_control(new WP_Customize_Image_control($wp_customize, 'main_logo', array(
+    $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, 'main_logo', array(
         'label'    => __('Logo principal', 'textdomain'),
         'section'  => 'my_theme_site_identity',
         'settings' => 'main_logo',
@@ -51,23 +51,46 @@ function my_theme_customize_register($wp_customize) {
     // Logo secondaire
     $wp_customize->add_setting('secondary_logo', array(
         'capability'        => 'edit_theme_options',
-        'sanitize_callback' => 'esc_url_raw', // Sanitize URL
+        'sanitize_callback' => 'esc_url_raw',
     ));
 
-    $wp_customize->add_control(new WP_Customize_Image_control($wp_customize, 'secondary_logo', array(
+    $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, 'secondary_logo', array(
         'label'    => __('Logo secondaire', 'textdomain'),
         'section'  => 'my_theme_site_identity',
         'settings' => 'secondary_logo',
     )));
+
+    // Texte slider
+    $wp_customize->add_setting('textslider', array(
+        'default'           => get_option('textslider'),
+        'capability'        => 'edit_theme_options',
+        'sanitize_callback' => 'wp_filter_nohtml_kses',
+        'transport'         => 'postMessage',
+    ));
+
+    $wp_customize->add_control('textslider', array(
+        'label'    => __('Texte slider', 'textdomain'),
+        'section'  => 'my_theme_site_identity',
+        'settings' => 'textslider',
+        'type'     => 'text',
+    ));
 }
 add_action('customize_register', 'my_theme_customize_register');
 
-// Enregistrer les paramètres
-function my_theme_register_settings() {
-    register_setting('theme-customizer-group', 'blogname');
-    register_setting('theme-customizer-group', 'blogdescription');
-    register_setting('theme-customizer-group', 'main_logo');
-    register_setting('theme-customizer-group', 'secondary_logo');
+// Enregistrer les paramètres pour la page "Général"
+function my_theme_register_general_settings() {
+    register_setting('general-customizer-group', 'blogname');
+    register_setting('general-customizer-group', 'blogdescription');
+    register_setting('general-customizer-group', 'main_logo');
+    register_setting('general-customizer-group', 'secondary_logo');
 }
-add_action('admin_init', 'my_theme_register_settings');
+add_action('admin_init', 'my_theme_register_general_settings');
+
+// Enregistrer les paramètres pour la page "Home"
+function my_theme_register_home_settings() {
+    register_setting('home-customizer-group', 'textslider');
+    register_setting('home-customizer-group', 'dynamic_entries');
+}
+add_action('admin_init', 'my_theme_register_home_settings');
+
 ?>

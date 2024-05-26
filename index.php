@@ -23,7 +23,7 @@ $queryPartenaires = new WP_Query( $argsPartenaires );
 ?>
 <section class="sliderhero">
     <div>
-        <h2>Construisons la vie de notre campus ensemble</h2>
+        <h2><?php echo get_option('textslider'); ?></h2>
     </div>
     <div class="swiper">
         <div class="swiper-wrapper">
@@ -45,29 +45,34 @@ $queryPartenaires = new WP_Query( $argsPartenaires );
                 endif;
             ?>
         </div>
-    </div>
-    <div class="arrows">
-        <div class="prev" id="prev">01</div>
-        <div class="next"><?php echo ($total_posts < 10) ? '0' . $total_posts : $total_posts ?></div>
-    </div>
-</section>
-<section class="presentation">
-    <h2>Presentation du bde</h2>
-    <div class="container">
-        <div>
-            <h3>Qu'est-ce qu'un BDE ?</h3>
-            <p>Le Bureau Des Élèves (BDE) est une association à but non-lucratif qui a pour but de donner un cadre légal à toutes les manifestations extra-scolaires sur le campus.</p>
-        </div>
-        <div>
-            <h3>Quel est son rôle ?</h3>
-            <p>Le rôle du BDE est de fournir un cadre légal à toute organisation des manifestations. Il s’occupe aussi d’organiser des évènements, mais surtout, il accompagne les apprenants dans leurs projets associatifs pour le campus !</p>
-        </div>
-        <div>
-            <h3>Qui organise tout ça ?</h3>
-            <p>Le BDE est dirigé par des apprenants bénévoles avec une volonté de donner vie au campus et renforcer le lien inter-promotions !</p>
+        <div class="arrows">
+            <div class="prev" id="prev">01</div>
+            <div class="next"><?php echo ($total_posts < 10) ? '0' . $total_posts : $total_posts ?></div>
         </div>
     </div>
 </section>
+<?php
+    // Récupérer les entrées dynamiques
+    $dynamic_entries = get_option('dynamic_entries', []);
+
+    if (!empty($dynamic_entries)) {
+?>
+    <section class="presentation">
+        <h2>Presentation du bde</h2>
+        <div class="container">
+            <?php
+                foreach ($dynamic_entries as $entry) {
+                    ?>
+                    <div class="dynamic-entry">
+                        <h3><?php echo esc_html($entry['title']); ?></h3>
+                        <p><?php echo esc_html($entry['description']); ?></p>
+                    </div>
+                    <?php
+                }
+            ?>
+        </div>
+    </section>
+<?php } ?>
 <section class="partenaire">
     <h2>Nos partenaires</h2>
     <div class="gridPartenaires">

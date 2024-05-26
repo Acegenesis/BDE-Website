@@ -338,7 +338,7 @@ function my_theme_customizer_menu() {
         'theme-customizer', // Slug de la page
         'my_theme_customizer_page', // Fonction de rappel
         'dashicons-admin-customizer', // Icône du menu
-        61 // Position
+        5 // Position
     );
 
     add_submenu_page(

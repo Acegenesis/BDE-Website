@@ -9,7 +9,7 @@ function my_theme_customizer_page() {
             <div class="card-body">
                 <form method="post" action="options.php">
                     <?php
-                        settings_fields('theme-customizer-group');
+                        settings_fields('general-customizer-group');
                         do_settings_sections('theme-customizer');
                     ?>
                     <div class="form-group">
