@@ -689,6 +689,8 @@ section {
 .swiper {
     width: 100%;
     height: 100%;
+    overflow: unset!important;
+    overflow-y: clip!important;
 }
 
 .swiper-slide {
@@ -740,7 +742,7 @@ section {
     z-index: 9999;
     position: absolute;
     top: 20px;
-    right: calc(var(--slider-width) + 20px);
+    left: -40px;
     color: white;
     display: flex;
     flex-direction: column;
@@ -778,7 +780,7 @@ section {
 /* ---------------------------------------------- */
 
 .presentation {
-    height: 100vh;
+    min-height: 100vh;
     padding: 100px 0;
     padding-left: 100px;
     align-items: flex-start;
@@ -876,5 +878,279 @@ section {
             }
         }
         
+    }
+}
+
+
+@media screen and (max-width: 800px) {
+    header {
+        padding: 0 20px;
+        height: 70px;
+        width: 100vw;
+        flex-direction: row;
+        justify-content: space-between;
+
+        &::after,
+        &::before {
+            display: none;
+        }
+
+        .hamburger {
+            padding: 0;
+        }
+        .logos {
+            width: 100px;
+
+            #logo {
+                width: auto;
+                height: 60%;
+                object-fit: contain;
+            }
+        }
+    }
+
+    #nav {
+        height: 100vh;
+        flex-direction: column;
+
+        &.is-active{
+            padding-top: 70px;
+            padding-left: 20px;
+            justify-content: space-between;
+
+            ul {
+                height: fit-content;
+                order: 1;
+                justify-content: flex-start;
+                align-items: flex-start;
+    
+                li {
+                    font-size: 30px;
+                }
+            }
+
+            .presentation {
+                height: fit-content;
+                padding: 0;
+                order: 2;
+                width:100%;
+                min-height: unset;
+
+                h2 {
+                    font-size: 30px;
+                    color: rgba(0,0,0,0.7);
+                }
+
+                h1 {
+                    margin-top: 0;
+                    font-size: 70px;
+                }
+            }
+
+        }
+    }
+
+    main {
+        margin-top: 70px;
+        margin-left: 0;
+        width: 100%;
+
+        &>h1 {
+            font-size: 30px;
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        section {
+            overflow-x: hidden;
+            width: 100vw;
+
+            &.sliderhero {
+                height: auto;
+                margin-top: 50px;
+                margin-bottom: 50px;
+                padding: 0 20px;
+                flex-direction: column;
+
+                &>div:nth-child(1) {
+                    position: inherit;
+                    height: fit-content;
+                    margin-bottom: 20px;
+
+                    h2 {
+                        max-width: unset;
+                        font-size: 50px;
+                        margin: 0;
+                    }
+                }
+
+                &>div:nth-child(2) {
+                    position: inherit;
+                    margin-right: 0;
+                    width: calc(100% - 50px);
+                    aspect-ratio: 6 / 7;
+                    height: auto;
+
+                    h3 {
+                        font-size: 20px;
+                    }
+
+                    h2 {
+                        font-size: 30px;
+                    }
+
+                    img {
+                        height: 100%;
+                        object-fit: cover;
+                    }
+
+                    .arrows {
+                        top: 0;
+                    }
+                }
+            }
+        }
+
+        .event {
+            padding: 20px;
+            margin-top: 70px;
+
+            .event-header div {
+                h3 {
+                    font-size: 20px;
+                }
+
+                h1 {
+                    font-size: 30px;
+                }
+
+                h4 {
+                    font-size: 15px;
+                }
+
+                a {
+                    padding: 10px 25px;
+                }
+            }
+        }
+    }
+
+    #events-container,
+    #associations-container,
+    #news-container {
+        padding: 20px;
+
+        article {
+            width: 100%;
+            padding: 0;
+
+            a {
+                padding: 20px;
+            }
+
+            .more {
+                height: 50px;
+                width: 50px;
+
+                svg {
+                    width: 100%;
+                }
+            }
+
+            &.alone {
+                display: none;
+            }
+        }
+    }
+
+    .partenaire {
+        padding: 20px;
+        margin-bottom: 50px;
+    
+        h2 {
+            font-size: 30px;
+        }
+    
+        .gridPartenaires {
+            gap: 20px 20px;
+    
+            .cardPartenaire {
+                height: 100px;
+                width: 100px;
+            }
+            
+        }
+    }
+
+    .presentation {
+        min-height: unset;
+        padding: 20px;
+    
+        h2 {
+            font-size: 30px;
+        }
+    
+        .container {
+            padding: 20px;
+            gap: 20px;
+    
+                div h3 {
+                    color: white;
+                    font-size: 20px;
+                }    
+        }
+    }
+
+    footer {
+        margin-left: 0;
+        width: 100%;
+        flex-direction: column;
+        padding: 0;
+
+        nav {
+            padding: 20px;
+            flex-direction: column;
+
+            .presentation {
+                width: 100%;
+                height: fit-content;
+                min-height: unset;
+                padding: 0;
+                justify-content: flex-start;
+                align-items: flex-start;
+
+                h2 {
+                    font-size: 20px;
+                }
+
+                h1 {
+                    font-size: 50px;
+                    letter-spacing: -2px;
+                }
+            }
+
+            ul {
+                padding-top: 20px;
+                width: 100%;
+                align-items: flex-start;
+
+                li {
+                    font-size: 30px;
+                }
+            }
+        }
+
+        #footerBottom {
+            margin-top: 20px;
+            width: 100%;
+            padding: 20px;
+            flex-direction: column;
+            align-items: flex-start; 
+            flex-wrap: wrap;
+
+            ul li {
+                font-size: 15px;
+            }
+        }
     }
 }

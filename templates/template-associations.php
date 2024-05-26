@@ -43,7 +43,7 @@ get_header();
         endwhile;
         if( $paged == $query->max_num_pages && $query->found_posts % 2 != 0 ) :
             ?>
-            <article>
+            <article class="alone">
             </article>
         <?php
         endif;
